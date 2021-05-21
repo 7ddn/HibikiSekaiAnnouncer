@@ -1,5 +1,4 @@
-package org.example.mirai.plugin
-
+package org.sddn.plugin.hibiki
 import net.mamoe.mirai.alsoLogin
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.enable

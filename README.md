@@ -1,5 +1,11 @@
-# mirai-console-plugin-template
+# hibiki-sekai-announcer
 
-[Mirai Console](https://github.com/mamoe/mirai-console) 插件模板, 使用 Kotlin + Gradle.
+> 为プロジェクトセカイ feat.初音ミク 开发的支持插件
 
-[如何使用](https://github.com/project-mirai/how-to-use-plugin-template)
+## 预定功能
+
+- 活动开始/结束提醒
+- 卡查
+- 曲查
+  - 乐曲别名
+- 谱面查询
