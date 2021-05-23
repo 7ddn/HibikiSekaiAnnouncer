@@ -1,4 +1,6 @@
 package org.sddn.plugin.hibiki
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import net.mamoe.mirai.alsoLogin
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.enable
@@ -11,9 +13,15 @@ suspend fun main() {
     PluginMain.load()
     PluginMain.enable()
 
-    val bot = MiraiConsole.addBot(123456, "") {
+    /*val bot = MiraiConsole.addBot(123456, "") {
         fileBasedDeviceInfo()
     }.alsoLogin()
 
-    MiraiConsole.job.join()
+    MiraiConsole.job.join()*/
+    GlobalScope.launch{
+        val ifOk =  Crawler.cardCrawler(12)
+        Crawler.cardPicCrawler(ifOk)
+        // println(PluginData.cards[0].ifNormalCached)
+    }
+
 }

@@ -15,3 +15,8 @@ repositories {
     mavenCentral()
     jcenter()
 }
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.alibaba:fastjson:1.2.73")
+}
