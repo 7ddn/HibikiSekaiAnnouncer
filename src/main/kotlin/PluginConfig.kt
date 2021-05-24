@@ -17,6 +17,7 @@ object PluginConfig : AutoSavePluginConfig("config") {
         mutableMapOf(
             "song" to "https://api.pjsek.ai/database/master/musics?id=",
             "card" to "https://api.pjsek.ai/database/master/cards?id=",
+            "event" to "https://api.pjsek.ai/database/master/events?id=",
             //TODO: "vocal" to "https://api.pjsek.ai/database/master/musicVocals?musicId=",
             "difficulties" to "https://api.pjsek.ai/database/master/musicDifficulties?musicId=",
         )

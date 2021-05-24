@@ -3,6 +3,7 @@ package org.sddn.plugin.hibiki
 import com.alibaba.fastjson.*
 import kotlinx.coroutines.delay
 import org.sddn.plugin.hibiki.beans.Card
+import org.sddn.plugin.hibiki.beans.Event
 import java.io.File
 
 
@@ -10,7 +11,10 @@ object Crawler {
     suspend fun cardCrawler(maxID : Int): Int {
         var cardID = PluginData.maxCardId
         while (true) {
-            if (cardID > maxID) return 0
+            if (cardID > maxID) {
+                PluginData.maxCardId = cardID
+                return 0
+            }
             cardID++
             try {
                 val cardUrl = PluginConfig.APIs["card"] + OtherUtils.intTo3Word(cardID)
@@ -58,7 +62,7 @@ object Crawler {
                     )
 
                     PluginData.cards.add(newCard)
-                    if (PluginData.chara2card[characterID] == null) PluginData.chara2card[characterID] = mutableSetOf()
+                    if (PluginData.chara2card[characterID] == null) PluginData.chara2card[characterID] = mutableListOf()
                     PluginData.chara2card[characterID]!!.add(newCard.id)
                     PluginMain.logger.info("添加新卡片 id = $id")
                     response.close()
@@ -99,17 +103,17 @@ object Crawler {
 
             try {
                 val urlNormal = HttpUtils.cardNormalUrlGenerate(characterID, relativeID)
-                val file = File("${PluginConfig.WorkingDir}pic\\normal\\${it.id}_normal.png")
-                HttpUtils.getImageFromUrlOrSave(file, urlNormal)
-                if (file.canRead()) {
+                val fileNormal = File("${PluginConfig.WorkingDir}pic\\normal\\${it.id}_normal.png")
+                HttpUtils.getImageFromUrlOrSave(fileNormal, urlNormal)
+                if (fileNormal.canRead()) {
                     it.ifNormalCached = true
                     PluginMain.logger.info("添加新特训前卡图 id = ${it.id}")
                 }
                 if (it.rarity > 2) {
                     val urlAfterTrained = HttpUtils.cardAfterTrainingUrlGenerate(characterID, relativeID)
-                    val file = File("${PluginConfig.WorkingDir}pic\\trained\\${it.id}_trained.png")
-                    HttpUtils.getImageFromUrlOrSave(file, urlAfterTrained)
-                    if (file.canRead()) {
+                    val fileTrained = File("${PluginConfig.WorkingDir}pic\\trained\\${it.id}_trained.png")
+                    HttpUtils.getImageFromUrlOrSave(fileTrained, urlAfterTrained)
+                    if (fileTrained.canRead()) {
                         it.ifTrainedCached = true
                         PluginMain.logger.info("添加新特训后卡图 id = ${it.id}")
                     }
@@ -119,6 +123,58 @@ object Crawler {
             }
         }
 
+    }
+
+    suspend fun eventCrawler(maxID: Int) : Int{
+        var eventID = PluginData.maxEventId
+        while (true) {
+            if (eventID > maxID) return 0
+            eventID++
+            try {
+                val eventUrl = PluginConfig.APIs["event"] + OtherUtils.intTo3Word(eventID)
+                val response = HttpUtils.httpGet(eventUrl)
+                if (response == null || !response.isSuccessful) {
+
+                    continue
+                }
+                val event = JSON.parseObject(response.body!!.string())
+                val count = event.getString("total").toInt()
+                if (count == 0) {
+
+                    PluginData.maxEventId = eventID - 1
+                    PluginMain.logger.info("读取到最新的活动ID为${eventID - 1}")
+                    break
+
+
+                } else {
+                    val data = event.getJSONArray("data").getJSONObject(0)
+                    val id = data.getIntValue("id")
+                    val name = data.getString("name")
+                    val startTime = data.getLong("startAt")
+                    val endTime = data.getLong("closedAt")
+                    val scoreCloseTime = data.getLong("aggregateAt")
+
+                    val newEvent = Event(
+                        id = id,
+                        name = name,
+                        startTime = startTime,
+                        endTime = endTime,
+                        scoreStopTime = scoreCloseTime
+                    )
+
+                    PluginData.events.add(newEvent)
+                    PluginMain.logger.info("添加新活动 id = $id")
+                    response.close()
+                    delay(500L)
+                }
+
+
+            } catch (e: Exception) {
+                PluginMain.logger.info(e.message)
+                return -1
+            }
+        }
+        return 0
     }
 
 

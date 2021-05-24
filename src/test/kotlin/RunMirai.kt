@@ -19,8 +19,9 @@ suspend fun main() {
 
     MiraiConsole.job.join()*/
     GlobalScope.launch{
-        val ifOk =  Crawler.cardCrawler(12)
-        Crawler.cardPicCrawler(ifOk)
+        //val ifOk =  Crawler.cardCrawler(12)
+        //Crawler.cardPicCrawler(ifOk)
+        Crawler.eventCrawler(3)
         // println(PluginData.cards[0].ifNormalCached)
     }
 
