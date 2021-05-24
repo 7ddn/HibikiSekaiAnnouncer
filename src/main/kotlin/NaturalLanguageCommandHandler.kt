@@ -44,6 +44,7 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     //println("text:$messageText\nid:@${bot.id}")
     if (messageText.contains("@${bot.id}")) {
         val patternTeachNickname = Regex("其实(.+)就是(.+)$")
+        val patternForgetNickname = Regex("其实(.+)不是(.+)$")
         //println("${patternTeachNickname.containsMatchIn(messageText)}\n")
         if (patternTeachNickname.containsMatchIn(messageText)) {
             //println("matched")
@@ -71,8 +72,37 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
                     //都未知
                     group.sendMessage(At(sender) + PlainText("呜呜,${name1}和${name2}我好像一个都不认识呢"))
                 }
+                return
+            }
+        } else if (patternForgetNickname.containsMatchIn(messageText)) {
+
+            val matches = patternForgetNickname.findAll(messageText)
+            val name1 = matches.map { it.groupValues[1] }.joinToString()
+            val name2 = matches.map { it.groupValues[2] }.joinToString()
+            val id1 = OtherUtils.charNameToID(name1)
+            val id2 = OtherUtils.charNameToID(name2)
+            if (id1 != 1) {
+                if (id2 == id1) {
+                    // 都已知且有关
+                    PluginData.chara2nickname[id1]!!.remove(name2)
+                    group.sendMessage(At(sender) + PlainText("以后我就不把${name1}当成${name2}了喔"))
+                } else {
+                    if (id2 != -1) {
+                        // 都已知但无关
+                        group.sendMessage(At(sender) + PlainText("${name1}和${name2}好像本来就不是同一个人呢"))
+                    } else {
+                        //2未知
+                        group.sendMessage(At(sender) + PlainText("哎呀，我好像不认识${name2}呢"))
+                    }
+                }
+            } else {
+                if (id2 != -1) {
+                    group.sendMessage(At(sender) + PlainText("あれ？${name1}是谁呀"))
+                } else {
+                    group.sendMessage(At(sender) + PlainText("呜呜,${name1}和${name2}我好像一个都不认识呢"))
+                }
             }
         }
-        return
+
     }
 }
