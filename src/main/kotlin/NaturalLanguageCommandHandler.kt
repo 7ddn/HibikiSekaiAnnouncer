@@ -1,15 +1,18 @@
 package org.sddn.plugin.hibiki
 
-import net.mamoe.mirai.console.command.CommandSender.Companion.toCommandSender
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     val messageText = message.contentToString()
     //println("I'm called = ${group.botAsMember.nick}")
 
+
+    // 随机卡片
     val patternRandomCard = Regex("^随一个(.+)$")
     if (patternRandomCard.matches(messageText)) {
         PluginMain.logger.info("随点啥")
@@ -43,6 +46,8 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     //println(messageText.contains("@${bot.id}"))
     //println("text:$messageText\nid:@${bot.id}")
     if (messageText.contains("@${bot.id}")) {
+
+        // 别名控制
         val patternTeachNickname = Regex("其实(.+)就是(.+)$")
         val patternForgetNickname = Regex("其实(.+)不是(.+)$")
         //println("${patternTeachNickname.containsMatchIn(messageText)}\n")
@@ -72,8 +77,8 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
                     //都未知
                     group.sendMessage(At(sender) + PlainText("呜呜,${name1}和${name2}我好像一个都不认识呢"))
                 }
-                return
             }
+            return
         } else if (patternForgetNickname.containsMatchIn(messageText)) {
 
             val matches = patternForgetNickname.findAll(messageText)
@@ -102,6 +107,55 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
                     group.sendMessage(At(sender) + PlainText("呜呜,${name1}和${name2}我好像一个都不认识呢"))
                 }
             }
+            return
+        }
+
+
+        // 计时器控制(试制)
+        val patternSetAlarm = Regex(
+            "(((\\d{1,2}月)?(\\d{1,2}号))|(今天|明天|后天))?(\\d{2}:\\d{2}:?(\\d{2})?)叫我(.+)\$")
+        if (patternSetAlarm.containsMatchIn(messageText)){
+            val matches = patternSetAlarm.findAll(messageText)
+            val day = matches.map{it.groupValues[1]}.joinToString()
+            val time1 = matches.map{it.groupValues[6]}.joinToString()
+            val hour = time1.substring(0,2).toInt()
+            val minute = time1.substring(3,5).toInt()
+            var second = matches.map{it.groupValues[7]}.joinToString()
+            val notice = matches.map{it.groupValues[8]}.joinToString()
+            // val formatDate = SimpleDateFormat("yyyy-MM-dd")
+            // val nowDate = formatDate.format(Date())
+            val date = Calendar.getInstance(Locale.CHINA)
+            date.set(Calendar.HOUR_OF_DAY, hour)
+            date.set(Calendar.MINUTE, minute)
+
+            if (second == "") second = "0"
+            date.set(Calendar.SECOND, second.toInt())
+
+            // val formatTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            // val time = formatTime.parse("$date $time1:$time2")
+            when (day) {
+                "明天" -> date.add(Calendar.DATE, 1)
+                "后天" -> date.add(Calendar.DATE, 2)
+                "", "今天" -> Unit
+                else -> {
+                    val dayString = matches.map{it.groupValues[4]}.joinToString()
+                    val dayOfMonth = dayString.substring(0,dayString.length-1).toInt()
+                    println(dayOfMonth)
+                    date.set(Calendar.DATE, dayOfMonth)
+                    val monthString = matches.map{it.groupValues[3]}.joinToString()
+                    if (monthString != ""){
+                        val month = monthString.substring(0,monthString.length-1).toInt()
+                        date.set(Calendar.MONTH, month - 1)
+                    }
+                }
+            }
+            Alarm.addAlarmToSendMessage(
+                date.timeInMillis,
+                At(sender).toMessageChain()+PlainText(" 快去$notice"),
+                group
+            )
+            group.sendMessage("添加${date.time}的闹钟成功")
+            return
         }
 
     }

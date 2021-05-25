@@ -12,6 +12,7 @@ import net.mamoe.mirai.message.data.toMessageChain
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import net.mamoe.mirai.utils.info
 import java.io.File
+import java.util.*
 import kotlin.random.Random
 
 object PluginMain : KotlinPlugin(
@@ -35,6 +36,8 @@ object PluginMain : KotlinPlugin(
         PluginConfig.reload()
 
         PluginData.reload()
+
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"))
 
         GlobalScope.launch{
             println("working on card")
