@@ -3,6 +3,7 @@ package org.sddn.plugin.hibiki
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
+import org.sddn.plugin.hibiki.PluginMain.refresh
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -10,6 +11,13 @@ import java.util.*
 suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     val messageText = message.contentToString()
     //println("I'm called = ${group.botAsMember.nick}")
+
+    // 活动订阅
+    if (messageText == "添加活动订阅"){
+        PluginData.autoEventAlarmGroupList.add(group.id)
+        group.sendMessage("成功提醒截活小助手成功")
+        refresh()
+    }
 
 
     // 随机卡片

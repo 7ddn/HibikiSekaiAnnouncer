@@ -10,4 +10,5 @@ data class Event(
     var startTime : Long = 0, //millisecond
     var scoreStopTime : Long = 0,
     var endTime : Long = 0,
+    var alarmApplied : Boolean = false,
 )

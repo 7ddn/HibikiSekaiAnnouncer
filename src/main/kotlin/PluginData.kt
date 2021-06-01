@@ -2,6 +2,7 @@ package org.sddn.plugin.hibiki
 
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value
+import org.sddn.plugin.hibiki.beans.Alarm
 import org.sddn.plugin.hibiki.beans.Card
 import org.sddn.plugin.hibiki.beans.Event
 import org.sddn.plugin.hibiki.beans.Song
@@ -45,4 +46,7 @@ object PluginData : AutoSavePluginData("data"){
     var maxCardId : Int by value(0)
     var maxEventId : Int by value(0)
     val songIDList : MutableSet<Int> by value()
+
+    val alarms : MutableSet<Alarm> by value(mutableSetOf())
+    val autoEventAlarmGroupList : MutableSet<Long> by value(mutableSetOf())
 }

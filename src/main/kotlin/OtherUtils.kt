@@ -60,4 +60,5 @@ object OtherUtils {
         }
         return messageText.toPlainText().toMessageChain()
     }
+
 }

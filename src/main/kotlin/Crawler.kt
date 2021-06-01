@@ -159,7 +159,8 @@ object Crawler {
                         name = name,
                         startTime = startTime,
                         endTime = endTime,
-                        scoreStopTime = scoreCloseTime
+                        scoreStopTime = scoreCloseTime,
+                        alarmApplied = false
                     )
 
                     PluginData.events.add(newEvent)
