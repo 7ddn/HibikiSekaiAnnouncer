@@ -108,6 +108,8 @@ object Crawler {
                 if (fileNormal.canRead()) {
                     it.ifNormalCached = true
                     PluginMain.logger.info("添加新特训前卡图 id = ${it.id}")
+                } else {
+                    PluginMain.logger.info("读取新特训前卡图 id = ${it.id}失败")
                 }
                 if (it.rarity > 2) {
                     val urlAfterTrained = HttpUtils.cardAfterTrainingUrlGenerate(characterID, relativeID)
@@ -116,6 +118,8 @@ object Crawler {
                     if (fileTrained.canRead()) {
                         it.ifTrainedCached = true
                         PluginMain.logger.info("添加新特训后卡图 id = ${it.id}")
+                    } else {
+                        PluginMain.logger.info("读取新特训后卡图 id = ${it.id}失败")
                     }
                 }
             } catch (e: Exception) {
