@@ -5,12 +5,16 @@ import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import org.sddn.plugin.hibiki.PluginMain.refresh
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 
 suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     val messageText = message.contentToString()
     //println("I'm called = ${group.botAsMember.nick}")
+
+    // 刷新资源
+    if (messageText == "刷新资源"){
+        refresh()
+    }
 
     // 活动订阅
     if (messageText == "添加活动订阅"){
@@ -23,7 +27,6 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     // 随机卡片
     val patternRandomCard = Regex("^随一个(.+)$")
     if (patternRandomCard.matches(messageText)) {
-        PluginMain.logger.info("随点啥")
         val charName = patternRandomCard.findAll(messageText).map { it.groupValues[1] }.joinToString()
         val charId = OtherUtils.charNameToID(charName)
         if (charId == -1) {
@@ -49,6 +52,50 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
         group.sendMessage(toSay)
         return
     }
+
+    // 抽卡模拟
+    if (messageText == "抽卡模拟") {
+        var i = PluginData.gachas.size - 1
+        var gachaName = PluginData.gachas[i].name
+        while (gachaName.contains("イベントメンバー") || gachaName.contains("カラフルフェスティバル")){
+            i --
+            gachaName = PluginData.gachas[i].name
+        }
+        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i])))
+        if (resultPicFile.canRead()) {
+            group.sendMessage(Image(resultPicFile.uploadAsImage(group).imageId))
+        }
+        return
+    }
+
+    if (messageText == "活动up模拟") {
+        var i = PluginData.gachas.size - 1
+        var gachaName = PluginData.gachas[i].name
+        while (!gachaName.contains("イベントメンバー")){
+            i --
+            gachaName = PluginData.gachas[i].name
+        }
+        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i])))
+        if (resultPicFile.canRead()) {
+            group.sendMessage(Image(resultPicFile.uploadAsImage(group).imageId))
+        }
+        return
+    }
+
+    if (messageText == "fes模拟") {
+        var i = PluginData.gachas.size - 1
+        var gachaName = PluginData.gachas[i].name
+        while (gachaName.contains("カラフルフェスティバル")){
+            i --
+            gachaName = PluginData.gachas[i].name
+        }
+        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i])))
+        if (resultPicFile.canRead()) {
+            group.sendMessage(Image(resultPicFile.uploadAsImage(group).imageId))
+        }
+        return
+    }
+
 
     // @相关处理
     //println(messageText.contains("@${bot.id}"))

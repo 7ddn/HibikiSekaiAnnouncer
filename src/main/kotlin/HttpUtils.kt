@@ -1,10 +1,8 @@
 package org.sddn.plugin.hibiki
 
-import io.ktor.http.cio.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.internal.EMPTY_RESPONSE
 import java.io.File
 
 object HttpUtils {
@@ -67,6 +65,16 @@ object HttpUtils {
     fun cardAfterTrainingUrlGenerate(characterID: String, relativeID: String) : String{
         return "https://assets.pjsek.ai/file/pjsekai-assets/startapp/character/member/" +
             "res${characterID}_no${relativeID}/card_after_training.png"
+    }
+
+    fun iconNormalUrlGenerate(characterID: String, relativeID: String) : String{
+        return "https://assets.pjsek.ai/file/pjsekai-assets/startapp/character/member_cutout/" +
+            "res${characterID}_no${relativeID}/normal/thumbnail_xl.png"
+    }
+
+    fun iconAfterTrainingUrlGenerate(characterID: String, relativeID: String) : String{
+        return "https://assets.pjsek.ai/file/pjsekai-assets/startapp/character/member_cutout/" +
+            "res${characterID}_no${relativeID}/after_training/thumbnail_xl.png"
     }
 
 

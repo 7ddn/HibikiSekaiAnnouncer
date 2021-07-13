@@ -2,15 +2,14 @@ package org.sddn.plugin.hibiki
 
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value
+import org.sddn.plugin.hibiki.beans.*
 import org.sddn.plugin.hibiki.beans.Alarm
-import org.sddn.plugin.hibiki.beans.Card
-import org.sddn.plugin.hibiki.beans.Event
-import org.sddn.plugin.hibiki.beans.Song
 
 object PluginData : AutoSavePluginData("data"){
     val cards : MutableList<Card> by value()
     val songs : MutableList<Song> by value()
     val events : MutableList<Event> by value()
+    val gachas : MutableList<Gacha> by value()
 
     val chara2card : MutableMap<Int, MutableList<Int>> by value()
     // TODO: val chara2song : MutableMap<Int, Int> by value()
@@ -45,6 +44,7 @@ object PluginData : AutoSavePluginData("data"){
 
     var maxCardId : Int by value(0)
     var maxEventId : Int by value(0)
+    var maxGachaId : Int by value(0)
     val songIDList : MutableSet<Int> by value()
 
     val alarms : MutableSet<Alarm> by value(mutableSetOf())

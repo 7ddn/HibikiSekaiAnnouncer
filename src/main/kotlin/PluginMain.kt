@@ -72,12 +72,18 @@ object PluginMain : KotlinPlugin(
     }
 
     suspend fun refresh() {
+        println("getting external resources")
+        Crawler.externalResourcesCrawler()
         println("getting card list")
         var ifOk = Crawler.cardCrawler(Int.MAX_VALUE)
         println("getting card pics")
         Crawler.cardPicCrawler(ifOk)
+        println("getting card Icons")
+        Crawler.cardIconCrawler(ifOk)
         println("getting event list")
         ifOk = Crawler.eventCrawler(Int.MAX_VALUE)
+        println("getting gachas")
+        Crawler.gachaCrawler(Int.MAX_VALUE)
         if (ifOk != 666) { // just to make sure this will work after get newest event
             // add event alarm
             val event = PluginData.events.last() //latest event

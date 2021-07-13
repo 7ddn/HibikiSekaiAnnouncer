@@ -1,10 +1,5 @@
 package org.sddn.plugin.hibiki
 
-import net.mamoe.mirai.contact.Contact
-import net.mamoe.mirai.message.data.MessageChain
-import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.message.data.toMessageChain
-import net.mamoe.mirai.message.data.toPlainText
 import java.io.File
 
 object OtherUtils {
@@ -50,15 +45,11 @@ object OtherUtils {
         return -1
     }
 
-    suspend fun sendAndSplitToUnder100 (message : PlainText, target: Contact) : MessageChain { //将要发送的PlainText拆分成最长99的字节并发送
-        PluginMain.logger.info("正在分割长句$message")
-        var messageText = message.content
-        while (messageText.length > 99){
-            val sub100 =  messageText.substring(0, 99)
-            target.sendMessage(sub100.toPlainText())
-            messageText = messageText.substring(99, messageText.length)
-        }
-        return messageText.toPlainText().toMessageChain()
+    fun generateNonce(size: Int): String {
+        val nonceScope = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        val scopeSize = nonceScope.length
+        val nonceItem: (Int) -> Char = { nonceScope[(scopeSize * Math.random()).toInt()] }
+        return Array(size, nonceItem).joinToString("")
     }
 
 }
