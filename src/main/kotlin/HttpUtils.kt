@@ -77,5 +77,10 @@ object HttpUtils {
             "res${characterID}_no${relativeID}/after_training/thumbnail_xl.png"
     }
 
+    fun gachaLogoUrlGenerate(gachaID: Int) : String{
+        return "https://assets.pjsek.ai/file/pjsekai-assets/ondemand/gacha/ab_gacha_" +
+            "$gachaID/logo/logo.png"
+    }
+
 
 }

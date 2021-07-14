@@ -393,6 +393,33 @@ object Crawler {
         return 0
     }
 
+    suspend fun gachaLogoCrawler(ifOk: Int){
+        OtherUtils.checkAndCreateWorkingDir("${PluginConfig.WorkingDir}pic\\gacha\\logo\\")
+
+        val gachas = PluginData.gachas
+
+        gachas.forEach{
+            val gachaLogoFile = File("${PluginConfig.WorkingDir}pic\\gacha\\logo\\${it.id}.png")
+            if (gachaLogoFile.canRead()) return@forEach
+            val url =
+                if (it.name == "★3以上確定チケットガチャ") { // 必三抽卡使用同一套资源
+                    HttpUtils.gachaLogoUrlGenerate(2)
+                } else {
+                    HttpUtils.gachaLogoUrlGenerate(it.id)
+                }
+            try {
+                HttpUtils.getImageFromUrlOrSave(gachaLogoFile, url)
+                if (gachaLogoFile.canRead()) {
+                    PluginMain.logger.info("添加新抽卡logo id = ${it.id}")
+                } else {
+                    PluginMain.logger.info("读取新抽卡logo id = ${it.id}失败")
+                }
+            } catch (e:Exception){
+                PluginMain.logger.info(e.message)
+            }
+        }
+    }
+
 
 
 }

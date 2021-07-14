@@ -61,7 +61,7 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
             i --
             gachaName = PluginData.gachas[i].name
         }
-        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i])))
+        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i]), PluginData.gachas[i].id))
         if (resultPicFile.canRead()) {
             group.sendMessage(Image(resultPicFile.uploadAsImage(group).imageId))
         }
@@ -75,7 +75,7 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
             i --
             gachaName = PluginData.gachas[i].name
         }
-        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i])))
+        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i]), PluginData.gachas[i].id))
         if (resultPicFile.canRead()) {
             group.sendMessage(Image(resultPicFile.uploadAsImage(group).imageId))
         }
@@ -89,7 +89,7 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
             i --
             gachaName = PluginData.gachas[i].name
         }
-        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i])))
+        val resultPicFile = File(GachaSimulation.buildGachaImage(GachaSimulation.getGachaResult(PluginData.gachas[i]), PluginData.gachas[i].id))
         if (resultPicFile.canRead()) {
             group.sendMessage(Image(resultPicFile.uploadAsImage(group).imageId))
         }

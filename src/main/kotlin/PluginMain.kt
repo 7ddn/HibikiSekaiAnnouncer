@@ -81,9 +81,11 @@ object PluginMain : KotlinPlugin(
         println("getting card Icons")
         Crawler.cardIconCrawler(ifOk)
         println("getting event list")
-        ifOk = Crawler.eventCrawler(Int.MAX_VALUE)
         println("getting gachas")
-        Crawler.gachaCrawler(Int.MAX_VALUE)
+        ifOk = Crawler.gachaCrawler(Int.MAX_VALUE)
+        println("getting gacha pics")
+        Crawler.gachaLogoCrawler(ifOk)
+        ifOk = Crawler.eventCrawler(Int.MAX_VALUE)
         if (ifOk != 666) { // just to make sure this will work after get newest event
             // add event alarm
             val event = PluginData.events.last() //latest event

@@ -6,7 +6,11 @@ import java.io.File
 import javax.imageio.ImageIO
 
 object GachaSimulation {
-    suspend fun buildGachaImage(cards: List<Int>) :String{
+    suspend fun buildGachaImage(
+        cards: List<Int>,
+        gachaID: Int,
+        ifBonus: Boolean = false,
+    ) :String{
         val bgFile = File("${PluginConfig.WorkingDir}pic\\rsc\\gachaTemplate.png")
         if (!bgFile.canRead()){
             val ifSuccess = Crawler.externalResourcesCrawler()
@@ -16,6 +20,15 @@ object GachaSimulation {
         val g2 = bg.createGraphics()
         g2.drawImage(bg, 0, 0, null)
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+        //抽卡logo
+        val gachaLogoFile = File("${PluginConfig.WorkingDir}pic\\gacha\\logo\\${gachaID}.png")
+        if (!gachaLogoFile.canRead()){
+            val ifSuccess = Crawler.gachaLogoCrawler(1)
+        }
+        val gachaLogo = ImageIO.read(gachaLogoFile)
+        g2.drawImage(gachaLogo, 4, 156,560, 256, null)
+        //这里是硬编码，需要改动
 
         for (i in cards.indices) {
             val card = PluginData.cards[cards[i] - 1]
@@ -55,6 +68,20 @@ object GachaSimulation {
             for (j in 0 until card.rarity) {
                 g2.drawImage(star, PluginConfig.iconCoordinate[i].first + 13 + 35 * j , PluginConfig.iconCoordinate[i].second + 200, 35, 33, null)
             }
+
+            //bonus缎带
+            if (ifBonus) {
+                // TODO: 上传缎带到图床 现在错了
+                val bonusRibbonFile = File("${PluginConfig.WorkingDir}pic\\rsc\\rarityStar.png")
+                if (!bonusRibbonFile.canRead()) {
+                    val ifSuccess = Crawler.externalResourcesCrawler()
+                }
+                val bonusRibbon = ImageIO.read(bonusRibbonFile)
+                g2.drawImage(bonusRibbon, 291, 716,309,57, null)
+                //此处为硬编码，需要改动
+            }
+
+
 
 
         }
