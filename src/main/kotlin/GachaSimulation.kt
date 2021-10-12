@@ -30,9 +30,12 @@ object GachaSimulation {
         g2.drawImage(gachaLogo, 4, 156,560, 256, null)
         //这里是硬编码，需要改动
 
+
+        println("result = $cards")
         for (i in cards.indices) {
+            println("id = ${cards[i]}")
             val card = PluginData.cards[cards[i] - 1]
-            println(card.cardName)
+            println("${card.id} ${card.cardName}")
 
             // 卡面
             val cardIconFile = File("${PluginConfig.WorkingDir}pic\\normal\\icon\\${cards[i]}_normal.png")
@@ -78,7 +81,7 @@ object GachaSimulation {
                 }
                 val bonusRibbon = ImageIO.read(bonusRibbonFile)
                 g2.drawImage(bonusRibbon, 291, 716,309,57, null)
-                //此处为硬编码，需要改动
+                //此处为硬编码，需要改动1
             }
 
 

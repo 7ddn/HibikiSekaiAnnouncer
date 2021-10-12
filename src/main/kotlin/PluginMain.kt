@@ -59,6 +59,22 @@ object PluginMain : KotlinPlugin(
 
         GlobalScope.launch{
             refresh()
+
+            // 检查alarm列表
+            val nowTime : Long = Calendar.getInstance(Locale.CHINA).timeInMillis
+            PluginData.alarms.forEach {
+                if (it.time - nowTime < -20000) {
+                    PluginData.alarms.remove(it)
+                } else {
+                    Alarm.addAlarmToSendMessage(
+                        timeInMillis = it.time,
+                        notice = it.message,
+                        contactId = it.contactId,
+                        bot
+                    )
+                    println("从缓存中回收了${it.time}的闹钟")
+                }
+            }
         }
 
 
@@ -135,21 +151,7 @@ object PluginMain : KotlinPlugin(
             }
         }
 
-        // 检查alarm列表
-        val nowTime : Long = Calendar.getInstance(Locale.CHINA).timeInMillis
-        PluginData.alarms.forEach {
-            if (it.time - nowTime < -20000) {
-                PluginData.alarms.remove(it)
-            } else {
-                Alarm.addAlarmToSendMessage(
-                    timeInMillis = it.time,
-                    notice = it.message,
-                    contactId = it.contactId,
-                    bot
-                )
-                println("从缓存中回收了${it.time}的闹钟")
-            }
-        }
+
 
     }
 

@@ -54,10 +54,16 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     }
 
     // 抽卡模拟
+    // TODO: 重构成switch或者in list
     if (messageText == "抽卡模拟") {
         var i = PluginData.gachas.size - 1
         var gachaName = PluginData.gachas[i].name
-        while (gachaName.contains("イベントメンバー") || gachaName.contains("カラフルフェスティバル")){
+        while (gachaName.contains("イベントメンバー") || gachaName.contains("カラフルフェスティバル")
+            || gachaName.contains("セレクトリストガチャ") || gachaName.contains("★4メンバー1人確定ガチャ")
+            || gachaName.contains("初心者応援") || gachaName.contains("HAPPY BIRTHDAY")
+            || gachaName.contains("プレミアムプレゼント") || gachaName.contains("無料")
+            || gachaName.contains("メモリアルセレクト")
+        ){
             i --
             gachaName = PluginData.gachas[i].name
         }
@@ -67,6 +73,8 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
         }
         return
     }
+
+    // TODO: 抽象成通过关键词查找
 
     if (messageText == "活动up模拟") {
         var i = PluginData.gachas.size - 1
@@ -85,7 +93,7 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     if (messageText == "fes模拟") {
         var i = PluginData.gachas.size - 1
         var gachaName = PluginData.gachas[i].name
-        while (gachaName.contains("カラフルフェスティバル")){
+        while (!gachaName.contains("カラフルフェスティバル")){
             i --
             gachaName = PluginData.gachas[i].name
         }

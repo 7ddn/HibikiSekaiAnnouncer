@@ -16,5 +16,5 @@ data class Card(
     var ifTrainedCached: Boolean = false,
 
     //TODO:
-    //var gatha: MutableSet<Int> = mutableSetOf()
+    //var gacha: MutableSet<Int> = mutableSetOf()
 )

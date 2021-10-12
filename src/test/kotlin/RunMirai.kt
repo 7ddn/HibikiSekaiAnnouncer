@@ -20,13 +20,13 @@ suspend fun main() {
 
     MiraiConsole.job.join()*/
     GlobalScope.launch{
-        val ifOk =  Crawler.cardCrawler(Int.MAX_VALUE)
+        val ifOk =  Crawler.cardCrawler(20)
         //Crawler.cardPicCrawler(ifOk)
         //Crawler.eventCrawler(3)
-        Crawler.gachaCrawler(1)
+        //Crawler.gachaCrawler(1)
         //Crawler.externalResourcesCrawler()
-        Crawler.cardIconCrawler(ifOk)
-        /* val testGacha = Gacha(
+        //Crawler.cardIconCrawler(ifOk)
+        val testGacha = Gacha(
             rarity2Rate = 0.885,
             rarity3Rate = 0.0885,
             rarity4Rate = 0.03,
@@ -36,11 +36,12 @@ suspend fun main() {
             pickups = listOf(
                 4,
             )
-        )*/
-
-        GachaSimulation.buildGachaImage(
-            GachaSimulation.getGachaResult(PluginData.gachas[0])
         )
+
+        //GachaSimulation.buildGachaImage(
+            //GachaSimulation.getGachaResult(PluginData.gachas[0])
+        //)
+        println(GachaSimulation.getGachaResult(testGacha))
         //println(PluginData.gachas[0].contents.size)
         // println(PluginData.cards[0].ifNormalCached)
     }
