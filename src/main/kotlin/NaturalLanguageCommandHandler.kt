@@ -55,6 +55,7 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
 
     // 抽卡模拟
     // TODO: 重构成switch或者in list
+    // TODO: 支持生日抽卡
     if (messageText == "抽卡模拟") {
         var i = PluginData.gachas.size - 1
         var gachaName = PluginData.gachas[i].name
@@ -62,7 +63,7 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
             || gachaName.contains("セレクトリストガチャ") || gachaName.contains("★4メンバー1人確定ガチャ")
             || gachaName.contains("初心者応援") || gachaName.contains("HAPPY BIRTHDAY")
             || gachaName.contains("プレミアムプレゼント") || gachaName.contains("無料")
-            || gachaName.contains("メモリアルセレクト")
+            || gachaName.contains("メモリアルセレクト") || gachaName.contains("HAPPY ANNIVERSARY")
         ){
             i --
             gachaName = PluginData.gachas[i].name
