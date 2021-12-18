@@ -137,7 +137,11 @@ object Crawler {
                     val cardName = data.getString("prefix")
                     val cardSkillName = data.getString("cardSkillName")
                     val attr = data.getString("attr")
-                    val rarity = data.getIntValue("rarity")
+                    var rarity = data.getIntValue("rarity")
+                    val rarityType = data.getString("cardRarityType")
+                    if (rarityType == "rarity_birthday") {
+                        rarity = -1
+                    }
                     val cardSkillID = data.getIntValue("skillId")
                     val relativeID = data.getString("assetbundleName").substring(9).toInt()
 

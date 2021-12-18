@@ -12,14 +12,14 @@ suspend fun main() {
     MiraiConsoleTerminalLoader.startAsDaemon()
 
     PluginMain.load()
-    // PluginMain.enable()
+    PluginMain.enable()
 
-    /*val bot = MiraiConsole.addBot(123456, "") {
+    val bot = MiraiConsole.addBot(3590094528, "QwErTyUiO") {
         fileBasedDeviceInfo()
     }.alsoLogin()
 
-    MiraiConsole.job.join()*/
-    GlobalScope.launch{
+    MiraiConsole.job.join()
+    /*GlobalScope.launch{
         val ifOk =  Crawler.cardCrawler(20)
         //Crawler.cardPicCrawler(ifOk)
         //Crawler.eventCrawler(3)
@@ -44,6 +44,6 @@ suspend fun main() {
         println(GachaSimulation.getGachaResult(testGacha))
         //println(PluginData.gachas[0].contents.size)
         // println(PluginData.cards[0].ifNormalCached)
-    }
+    }*/
 
 }

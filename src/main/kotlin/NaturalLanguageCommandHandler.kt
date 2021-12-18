@@ -9,6 +9,7 @@ import java.util.*
 
 suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     val messageText = message.contentToString()
+    println(messageText)
     //println("I'm called = ${group.botAsMember.nick}")
 
     // 刷新资源
@@ -110,6 +111,22 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
     //println(messageText.contains("@${bot.id}"))
     //println("text:$messageText\nid:@${bot.id}")
     if (messageText.contains("@${bot.id}")) {
+
+        // Roll点
+        // 因为功能太小了就先放在这里，如果以后有空了还是独立出来的好
+        val patternRoll = Regex("([0-9]+)[D|d]([0-9]+)(\\+([0-9]+))?")
+        if (patternRoll.containsMatchIn(messageText)) {
+            val matches = patternRoll.findAll(messageText)
+            val diceNum = matches.map { it.groupValues[1] }.joinToString().toInt()
+            val diceSize = matches.map { it.groupValues[2] }.joinToString().toInt()
+            val diceExtS = matches.map { it.groupValues[4] }.joinToString()
+            val diceExt = if (diceExtS=="") 0 else diceExtS.toInt()
+            println("$diceNum $diceSize $diceExt")
+            var sum = diceExt
+            for (i in 1..diceNum)
+                sum += (1..diceSize).random()
+            group.sendMessage("为${sender.nick}掷骰${diceNum}D${diceSize}"+ (if (diceExt==0) "" else "+${diceExt}") + ": 结果为${sum}")
+        }
 
         // 别名控制
         val patternTeachNickname = Regex("其实(.+)就是(.+)$")

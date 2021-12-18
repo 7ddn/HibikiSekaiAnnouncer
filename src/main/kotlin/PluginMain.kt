@@ -19,7 +19,7 @@ import kotlin.random.Random
 
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
-        id = "org.sddn.plugin.hibiki",
+        id = "org.sddn.hibiki.sekai",
         name = "HibikiSekaiAnnouncer",
         version = "0.1.0"
     ) {
@@ -29,7 +29,6 @@ object PluginMain : KotlinPlugin(
             音游プロジェクトセカイ feat.初音ミク的辅助插件
         """.trimIndent())
 
-        // author 和 info 可以删除.
     }
 ) {
     lateinit var bot: Bot

@@ -2,6 +2,8 @@
   <configuration default="false" name="RunMiraiKt" type="JetRunConfigurationType" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="org.sddn.plugin.hibiki.RunMiraiKt" />
     <module name="hibiki-sekai-announcer.test" />
+    <shortenClasspath name="NONE" />
+    <option name="VM_PARAMETERS" value="-Dmirai.slider.captcha.supported" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
     <method v="2">
       <option name="Make" enabled="true" />

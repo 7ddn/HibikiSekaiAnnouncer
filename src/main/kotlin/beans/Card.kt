@@ -9,7 +9,7 @@ data class Card(
     var cardSkillName: String = "", //卡片技能名称
     var characterID: Int = 0, //所属角色id
     var relativeID: Int = 0, //相对id,即在此角色分类下的id
-    var rarity: Int = 0, //稀有度
+    var rarity: Int = 0, //稀有度, -1=生日卡
     var attr: String = "", //颜色
     var cardSkillID: Int = 0, //技能编号
     var ifNormalCached: Boolean = false,
