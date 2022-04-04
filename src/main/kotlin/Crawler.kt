@@ -327,7 +327,9 @@ object Crawler {
             gachaID++
             try {
                 val gachaUrl = PluginConfig.APIs["gacha"] + OtherUtils.intTo3Word(gachaID)
+                //println("gachaUrl = $gachaUrl")
                 val response = HttpUtils.httpGet(gachaUrl)
+                //println(response!!.body!!.string())
                 if (response == null || !response.isSuccessful) {
                     continue
                 }
@@ -341,10 +343,24 @@ object Crawler {
                     val data = gacha.getJSONArray("data").getJSONObject(0)
                     val id = data.getIntValue("id")
                     val name = data.getString("name")
-                    val rarity1Rate = data.getDouble("rarity1Rate")/100.0
-                    val rarity2Rate = data.getDouble("rarity2Rate")/100.0
-                    val rarity3Rate = data.getDouble("rarity3Rate")/100.0
-                    val rarity4Rate = data.getDouble("rarity4Rate")/100.0
+                    val rarity = data.getJSONArray("gachaCardRarityRates")
+                    // val rarity1Rate = data.getDouble("rarity1Rate")/100.0
+                    // val rarity2Rate = data.getDouble("rarity2Rate")/100.0
+                    // val rarity3Rate = data.getDouble("rarity3Rate")/100.0
+                    // val rarity4Rate = data.getDouble("rarity4Rate")/100.0
+                    // 某次更新后更改了数据格式，现在抽卡概率保存在数组gachaCardRarityRates里
+                    var rarity2Rate = 0.0
+                    var rarity3Rate = 0.0
+                    var rarity4Rate = 0.0
+                    for (i in rarity.indices){
+                        val obj = rarity.getJSONObject(i)
+                        when (obj.getString("cardRarityType")) {
+                            "rarity_2" -> rarity2Rate = obj.getDouble("rate") / 100.0
+                            "rarity_3" -> rarity3Rate = obj.getDouble("rate") / 100.0
+                            "rarity_4" -> rarity4Rate = obj.getDouble("rate") / 100.0
+                        }
+                    }
+
                     val startTime = data.getLong("startAt")
                     val endTime = data.getLong("endAt")
 
@@ -371,7 +387,7 @@ object Crawler {
                     val newGacha = Gacha(
                         id = id,
                         name = name,
-                        rarity1Rate = rarity1Rate,
+                        rarity1Rate = 0.0,
                         rarity2Rate = rarity2Rate,
                         rarity3Rate = rarity3Rate,
                         rarity4Rate = rarity4Rate,

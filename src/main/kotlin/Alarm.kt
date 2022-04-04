@@ -4,6 +4,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.mamoe.mirai.Bot
+import net.mamoe.mirai.console.plugin.info
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.code.MiraiCode.deserializeMiraiCode
 import net.mamoe.mirai.message.data.MessageChain
@@ -23,7 +24,10 @@ object Alarm {
         println("added alarm at $timeInMillis")
         GlobalScope.launch {
             while (true) {
-                if (timeInMillis - System.currentTimeMillis() < 2000){
+                if (timeInMillis - System.currentTimeMillis() < -20000){
+                    PluginData.alarms.remove(alarm)
+                    PluginMain.logger.info("Alarm \"$notice\" have been outdated and is now removed ")
+                } else if (timeInMillis - System.currentTimeMillis() < 2000){
                     contact.sendMessage(notice)
                     PluginData.alarms.remove(alarm)
                     break

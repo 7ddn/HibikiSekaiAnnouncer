@@ -114,6 +114,9 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
 
         // Roll点
         // 因为功能太小了就先放在这里，如果以后有空了还是独立出来的好
+        // TODO:如果骰子的数目不太多的话(具体数字在config里设置)，则分别显示每个骰子的结果
+        // TODO: 在一轮中扔多个骰子
+
         val patternRoll = Regex("([0-9]+)[D|d]([0-9]+)(\\+([0-9]+))?")
         if (patternRoll.containsMatchIn(messageText)) {
             val matches = patternRoll.findAll(messageText)
@@ -123,9 +126,13 @@ suspend fun GroupMessageEvent.messageEventHandler(message: Message) {
             val diceExt = if (diceExtS=="") 0 else diceExtS.toInt()
             println("$diceNum $diceSize $diceExt")
             var sum = diceExt
-            for (i in 1..diceNum)
-                sum += (1..diceSize).random()
-            group.sendMessage("为${sender.nick}掷骰${diceNum}D${diceSize}"+ (if (diceExt==0) "" else "+${diceExt}") + ": 结果为${sum}")
+            var sumText = diceExt.toString()
+            for (i in 1..diceNum) {
+                val dice = (1..diceSize).random()
+                sum += dice
+                sumText += " + $dice"
+            }
+            group.sendMessage("为${sender.nick}掷骰${diceNum}D${diceSize}"+ (if (diceExt==0) "" else "+${diceExt}") + ": 结果为${if (diceNum < 10) "$sumText = " else ""}${sum}")
         }
 
         // 别名控制
