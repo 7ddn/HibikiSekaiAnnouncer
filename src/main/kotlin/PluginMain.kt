@@ -62,17 +62,13 @@ object PluginMain : KotlinPlugin(
             // 检查alarm列表
             val nowTime : Long = Calendar.getInstance(Locale.CHINA).timeInMillis
             PluginData.alarms.forEach {
-                if (it.time - nowTime < -20000) {
-                    PluginData.alarms.remove(it)
-                } else {
-                    Alarm.addAlarmToSendMessage(
-                        timeInMillis = it.time,
-                        notice = it.message,
-                        contactId = it.contactId,
-                        bot
-                    )
-                    println("从缓存中回收了${it.time}的闹钟")
-                }
+                Alarm.addAlarmToSendMessage(
+                    timeInMillis = it.time,
+                    notice = it.message,
+                    contactId = it.contactId,
+                    bot
+                )
+                println("从缓存中回收了${it.time}的闹钟")
             }
         }
 
@@ -106,8 +102,6 @@ object PluginMain : KotlinPlugin(
             val event = PluginData.events.last() //latest event
             if (!event.alarmApplied) {
                 // alarm before start
-                val toSayBefore = PlainText("活动${event.name}还有1小时就要开始了哦").toMessageChain()
-
                 // alarm before score end
                 val toSayBeforeScoreEndDay = PlainText("活动${event.name}今天就要截止了，要注意自己的排名呢")
                     .toMessageChain()
@@ -125,14 +119,9 @@ object PluginMain : KotlinPlugin(
                     println("now adding alarms for group $it")
                     val group = bot.getGroup(it)
                     Alarm.addAlarmToSendMessage(
-                        event.startTime - 3600000,
-                        toSayBefore,
-                        group!!
-                    )
-                    Alarm.addAlarmToSendMessage(
                         event.scoreStopTime - 43200000,
                         toSayBeforeScoreEndDay,
-                        group
+                        group!!
                     )
                     Alarm.addAlarmToSendMessage(
                         event.scoreStopTime - 3600000,
@@ -144,7 +133,7 @@ object PluginMain : KotlinPlugin(
                         toSayBeforeEnd,
                         group
                     )
-                    group.sendMessage("已经为活动${event.name}添加自动提醒")
+                   logger.info("已经为活动${event.name}添加自动提醒")
                 }
                 PluginData.events.last().alarmApplied = true
             }
